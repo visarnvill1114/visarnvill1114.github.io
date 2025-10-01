@@ -1,50 +1,269 @@
 <!doctype html>
-<html lang="th" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Portfolio</title>
-  <title>Visarn</title>
-  <meta name="description" content="Personal portfolio hosted on GitHub Pages" />
+  <title>Visarn Srisanguanvilas | Portfolio</title>
+  <meta name="description" content="Portfolio of Visarn Srisanguanvilas - Computer Engineering Student @ MFU" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Tailwind via CDN (no build needed) -->
+  <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
-          boxShadow: {
-            'soft': '0 10px 30px -10px rgba(0,0,0,0.25)'
-          }
+          boxShadow: { 'soft': '0 10px 30px -10px rgba(0,0,0,0.25)' }
         }
       },
       darkMode: 'class'
     }
   </script>
   <style>
-    /* Accent gradient */
-    .accent { background: linear-gradient(135deg, #22d3ee 0%, #6366f1 50%, #a855f7 100%); }
-    .text-gradient { background: linear-gradient(135deg, #22d3ee, #6366f1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .accent { background: linear-gradient(135deg,#22d3ee 0%,#6366f1 50%,#a855f7 100%); }
+    .text-gradient { background: linear-gradient(135deg,#22d3ee,#6366f1); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    
+    /* Enhanced Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    
+    .modal-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    
+    .modal-close:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .modal-body {
+      padding: 30px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      background: white;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: contain;
+      background: #f8fafc;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: white;
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-overlay {
+      transform: translateY(0);
+    }
+    
+    .gallery-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .gallery-description {
+      font-size: 0.9rem;
+      margin: 5px 0 0 0;
+      opacity: 0.9;
+    }
+    
+    .modal:target { display: flex; }
+    
+    /* Profile Image Enhancement */
+    .profile-image {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .profile-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 1.5rem;
+      z-index: 1;
+    }
+    
+    .profile-image:hover::before {
+      opacity: 1;
+    }
+    
+    .profile-image img {
+      position: relative;
+      z-index: 2;
+    }
+    
+    /* New Profile Design Animations */
+    @keyframes spin-slow {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .animate-spin-slow {
+      animation: spin-slow 20s linear infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Enhanced Profile Container */
+    .profile-container {
+      position: relative;
+      overflow: visible;
+    }
+    
+    .profile-container::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background: conic-gradient(from 0deg, #3b82f6, #8b5cf6, #ec4899, #06b6d4, #3b82f6);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.3;
+      animation: spin-slow 15s linear infinite;
+    }
   </style>
 </head>
 <body class="bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-100">
+
   <!-- Navbar -->
   <header class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-900/70 border-b border-slate-200/60 dark:border-slate-700/60">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="#home" class="font-extrabold tracking-tight text-xl">My<span class="text-gradient">Portfolio</span></a>
-      <a href="#home" class="font-extrabold tracking-tight text-xl">Visarn  <span class="text-gradient">Portfolio</span></a>
+      <a href="#home" class="font-extrabold tracking-tight text-xl">Visarn<span class="text-gradient"> Portfolio</span></a>
       <nav class="hidden md:flex gap-6 text-sm">
-        <a href="#about" class="hover:opacity-70">เกี่ยวกับฉัน</a>
-        <a href="#projects" class="hover:opacity-70">โปรเจกต์</a>
-        <a href="#skills" class="hover:opacity-70">ทักษะ</a>
-        <a href="#contact" class="hover:opacity-70">ติดต่อ</a>
+        <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">About</a>
+        <a href="#projects" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Projects</a>
+        <a href="#skills" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Skills</a>
+        <a href="#contact" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Contact</a>
       </nav>
       <div class="flex items-center gap-2">
-        <button id="themeToggle" class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 text-xs hover:shadow-soft">
-          โหมดมืด
+        <button id="themeToggle" class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 text-xs hover:shadow-soft transition-all duration-200">
+          Dark Mode
         </button>
         <button class="md:hidden rounded-xl p-2 border border-slate-300 dark:border-slate-700" id="menuBtn" aria-label="Open menu">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 fill-none stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -53,10 +272,10 @@
     </div>
     <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200/60 dark:border-slate-700/60">
       <nav class="max-w-6xl mx-auto px-4 py-3 grid gap-3 text-sm">
-        <a href="#about" class="py-2">เกี่ยวกับฉัน</a>
-        <a href="#projects" class="py-2">โปรเจกต์</a>
-        <a href="#skills" class="py-2">ทักษะ</a>
-        <a href="#contact" class="py-2">ติดต่อ</a>
+        <a href="#about" class="py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">About</a>
+        <a href="#projects" class="py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Projects</a>
+        <a href="#skills" class="py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Skills</a>
+        <a href="#contact" class="py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Contact</a>
       </nav>
     </div>
   </header>
@@ -66,41 +285,38 @@
     <div class="accent absolute inset-0 opacity-[0.07] pointer-events-none"></div>
     <div class="max-w-6xl mx-auto px-4 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
       <div>
-        <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Hello My name</p>
         <p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400">Hello, I'm</p>
         <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mt-2">Visarn Srisanguanvilas</h1>
-        <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">ตำแหน่ง/สาขาที่ถนัด — เช่น Frontend Developer | Data Analyst | UX Designer</p>
-        <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">Software Developer Student — Frontend • Backend • UX/UI</p>
+        <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">Computer Engineering Student @ MFU — Frontend • Backend • UX/UI</p>
         <div class="mt-6 flex flex-wrap gap-3">
-          <a href="#projects" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-soft">
-            ดูโปรเจกต์
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4 fill-none stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <a href="#projects" class="inline-flex items-center gap-2 rounded-2xl px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-soft hover:shadow-xl hover:scale-105 transition-all duration-300">
+            <span>View Projects</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
           </a>
-          <a href="#contact" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 border border-slate-300 dark:border-slate-700">ติดต่อฉัน</a>
-        </div>
-        <div class="mt-6 flex gap-4 text-slate-500">
-          <!-- Social links -->
-          <a href="https://github.com/your-username" class="hover:text-slate-900 dark:hover:text-white" aria-label="GitHub">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 00-3.162 19.492c.5.092.683-.217.683-.483 0-.237-.009-.866-.014-1.7-2.779.603-3.366-1.34-3.366-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.621.069-.608.069-.608 1.004.071 1.532 1.032 1.532 1.032.893 1.53 2.341 1.088 2.91.833.091-.647.35-1.088.636-1.338-2.22-.252-4.555-1.11-4.555-4.942 0-1.091.39-1.985 1.029-2.683-.103-.253-.446-1.27.098-2.648 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.503.337 1.909-1.294 2.748-1.025 2.748-1.025.545 1.378.202 2.395.1 2.648.64.698 1.028 1.592 1.028 2.683 0 3.842-2.338 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.339-.012 2.419-.012 2.749 0 .268.18.58.688.481A10 10 0 0012 2z" clip-rule="evenodd"/></svg>
-          <a href="tel:0945276645" class="hover:text-slate-900 dark:hover:text-white" aria-label="Phone">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.24 1.02l-2.2 2.2z"/></svg>
-          </a>
-          <a href="https://www.linkedin.com/in/your-username" class="hover:text-slate-900 dark:hover:text-white" aria-label="LinkedIn">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.84-2.2 3.8-2.2 4.06 0 4.81 2.67 4.81 6.14V24H16.5v-7.2c0-1.72-.03-3.94-2.4-3.94-2.4 0-2.77 1.87-2.77 3.81V24H8V8z"/></svg>
-          <a href="https://github.com/visarnvill1114" class="hover:text-slate-900 dark:hover:text-white" aria-label="GitHub">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 00-3.162 19.492c.5.092.683-.217.683-.483 0-.237-.009-.866-.014-1.7-2.779.603-3.366-1.34-3.366-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.621.069-.608.069-.608 1.004.071 1.532 1.032 1.532 1.032.893 1.53 2.341 1.088 2.91.833.091-.647.35-1.088.636-1.338-2.22-.252-4.555-1.11-4.555-4.942 0-1.091.39-1.985 1.029-2.683-.103-.253-.446-1.27.098-2.648 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.503.337 1.909-1.294 2.748-1.025 2.748-1.025.545 1.378.202 2.395.1 2.648.64.698 1.028 1.592 1.028 2.683 0 3.842-2.338 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.339-.012 2.419-.012 2.749 0 .268.18.58.688.481A10 10 0 0012 2z" clip-rule="evenodd"/></svg>
-          </a>
-          <a href="mailto:you@example.com" class="hover:text-slate-900 dark:hover:text-white" aria-label="Email">
-          
-          <a href="mailto:visarnvill11@gmail.com" class="hover:text-slate-900 dark:hover:text-white" aria-label="Email">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 13.065L.015 4.5h23.97L12 13.065zM12 15.3l-12-9V21h24V6.3l-12 9z"/></svg>
+          <a href="#contact" class="inline-flex items-center gap-2 rounded-2xl px-6 py-3 border border-slate-300 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-300">
+            <span>Get In Touch</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
           </a>
         </div>
       </div>
       <div class="relative">
-        <div class="w-64 h-64 md:w-80 md:h-80 rounded-3xl accent opacity-90 shadow-soft mx-auto"></div>
-        <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Profile" class="w-48 h-48 md:w-60 md:h-60 rounded-3xl object-cover shadow-2xl absolute -bottom-6 -right-6 ring-8 ring-white dark:ring-slate-900" />
-        <img src="./assets/img/profile/profile.png" alt="Profile" class="w-48 h-48 md:w-60 md:h-60 rounded-3xl object-cover shadow-2xl absolute -bottom-6 -right-6 ring-8 ring-white dark:ring-slate-900" />
+        <!-- Decorative Background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-3xl opacity-20 blur-xl"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl opacity-90 shadow-2xl"></div>
+        
+        <!-- Profile Image Container (Simplified) -->
+        <div class="relative z-10 flex items-center justify-center h-80 md:h-96">
+          <div class="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden shadow-2xl border-4 border-white dark:border-slate-900">
+            <img src="./assets/img/profile/profile.png" alt="Profile" class="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
       </div>
     </div>
   </section>
@@ -109,25 +325,57 @@
   <section id="about" class="py-16 md:py-24">
     <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-10">
       <div>
-        <h2 class="text-2xl md:text-3xl font-extrabold">เกี่ยวกับฉัน</h2>
-        <p class="mt-3 text-slate-600 dark:text-slate-300">แนะนำตัวสั้น ๆ เป้าหมายในการทำงาน ความสนใจ และคุณค่าที่คุณสร้างให้ทีม/ลูกค้า</p>
-        <p class="mt-3 text-slate-600 dark:text-slate-300">Motivated software developer student passionate about creating innovative solutions. Looking for opportunities to apply my knowledge in software development, with strong interests in frontend, backend, and UX/UI design.</p>
+        <h2 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">About Me</h2>
+        <p class="mt-4 text-slate-600 dark:text-slate-300 leading-relaxed">A passionate Computer Engineering student at Mae Fah Luang University, dedicated to creating innovative digital solutions. I specialize in full-stack development with expertise in modern web technologies, mobile applications, and user experience design. Always eager to learn new technologies and tackle challenging projects.</p>
       </div>
       <div class="md:col-span-2 grid gap-6">
-        <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-          <h3 class="font-semibold">ไฮไลต์</h3>
-          <h3 class="font-semibold">การศึกษา</h3>
-          <ul class="mt-3 grid gap-2 list-disc list-inside text-slate-600 dark:text-slate-300">
-            <li>ประสบการณ์ 2+ ปีด้าน Frontend (React, Tailwind)</li>
-            <li>ชนะ Hackathon 2024: Best UX</li>
-            <li>กำลังเรียนรู้ Data Viz ด้วย D3.js</li>
-            <li><span class="font-medium">Bachelor of Engineering Program in Computer Engineering</span><br/>Mae Fah Luang University (2565 – Now)</li>
-            <li><span class="font-medium">High School Diploma (Science–Math Program)</span><br/>Samakkhiwittayakhom School (2558 – 2564)</li>
+        <div class="p-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-soft">
+          <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-4">Education</h3>
+          <div class="mb-6 p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+            <h4 class="font-semibold text-blue-900 dark:text-blue-100">Mae Fah Luang University</h4>
+            <p class="text-blue-700 dark:text-blue-300 text-sm mt-1">Faculty of Applied Digital Technology - Computer Engineering</p>
+            <p class="text-blue-600 dark:text-blue-400 text-sm mt-2 font-medium">GPAX: 3.31</p>
+          </div>
+          
+          <h4 class="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-4">Relevant Coursework</h4>
+          <div class="grid md:grid-cols-3 gap-6 text-sm">
+            <div class="p-4 rounded-2xl bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800">
+              <h5 class="font-semibold text-green-900 dark:text-green-100 mb-3">Year 1</h5>
+              <ul class="space-y-2 text-green-700 dark:text-green-300">
+                <li class="flex items-start gap-2"><span class="text-green-500 mt-1">•</span> Computer Programming</li>
+                <li class="flex items-start gap-2"><span class="text-green-500 mt-1">•</span> Computer Engineering Essentials</li>
+                <li class="flex items-start gap-2"><span class="text-green-500 mt-1">•</span> Electric Circuits and Electronics</li>
+                <li class="flex items-start gap-2"><span class="text-green-500 mt-1">•</span> Object-Oriented Programming</li>
+                <li class="flex items-start gap-2"><span class="text-green-500 mt-1">•</span> Data Structures and Algorithms</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-2xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800">
+              <h5 class="font-semibold text-purple-900 dark:text-purple-100 mb-3">Year 2</h5>
+              <ul class="space-y-2 text-purple-700 dark:text-purple-300">
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> Database Systems</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> Digital Logic and Microcontrollers</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> Data Communications and Networks</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> Introduction to Data Science</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> AI Applications</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> Information Security</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> IoT and Embedded Systems</li>
+                <li class="flex items-start gap-2"><span class="text-purple-500 mt-1">•</span> Web Application Development</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-2xl bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800">
+              <h5 class="font-semibold text-orange-900 dark:text-orange-100 mb-3">Year 3</h5>
+              <ul class="space-y-2 text-orange-700 dark:text-orange-300">
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Digital Technology & Data Science</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Mobile Application Development</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Software Project Development</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Machine Learning</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Service Provider Network</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Cloud Computing</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Computer Architecture & OS</li>
+                <li class="flex items-start gap-2"><span class="text-orange-500 mt-1">•</span> Electronics and Electric Drives</li>
           </ul>
-        </div>
-        <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-          <h3 class="font-semibold">การศึกษา</h3>
-          <p class="mt-2 text-slate-600 dark:text-slate-300">B.Sc. in Computer Science — มหาวิทยาลัยของคุณ (2021–2025)</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -138,94 +386,54 @@
     <div class="max-w-6xl mx-auto px-4">
       <div class="flex items-end justify-between gap-4">
         <div>
-          <h2 class="text-2xl md:text-3xl font-extrabold">โปรเจกต์เด่น</h2>
-          <p class="mt-2 text-slate-600 dark:text-slate-300">ตัวอย่างงานจริง/งานฝึกซ้อม พร้อมลิงก์ไปยัง GitHub</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Featured Projects</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">A showcase of my recent work and projects demonstrating my skills in full-stack development, mobile applications, and UI/UX design.</p>
         </div>
-        <a href="https://github.com/your-username?tab=repositories" class="text-sm underline">ดูทั้งหมดบน GitHub →</a>
-        <a href="https://github.com/visarnvill1114?tab=repositories" class="text-sm underline">ดูทั้งหมดบน GitHub →</a>
+        <a href="https://github.com/visarnvill1114?tab=repositories" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 font-medium">
+          View All on GitHub 
+          <svg class="inline w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
       </div>
 
-      <!-- Edit projects here -->
       <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Card -->
-        <article class="group p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-soft transition">
-          <div class="aspect-video rounded-xl bg-slate-200/60 dark:bg-slate-800/60 grid place-items-center">
-            <span class="text-sm text-slate-500">ภาพหน้าปกโปรเจกต์</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-lg">Project One</h3>
-          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">เว็บแอประบบ Todo ที่โฟกัส UX เรียบง่าย</p>
-        <!-- Facial Recognition WiFi Access Project -->
-        <article class="group p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-soft transition gallery-card" data-images='["./assets/img/projects/Screenshot%202025-09-15%20201233.png","./assets/img/projects/Screenshot%202025-09-15%20201250.png","./assets/img/projects/Screenshot%202025-09-15%20201320.png"]'>
-          <a href="#" class="block aspect-video overflow-hidden rounded-xl bg-slate-200/60 dark:bg-slate-800/60 gallery-trigger" data-start="0">
-            <img src="./assets/img/projects/Screenshot%202025-09-15%20201233.png" alt="Facial Recognition WiFi screenshot" class="w-full h-full object-cover object-top hover:scale-[1.02] transition-transform" />
-          </a>
-          <h3 class="mt-4 font-semibold text-lg">Facial Recognition WiFi Access</h3>
-          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Accessing MFU-WiFi using facial recognition and Thai National ID verification.</p>
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">React</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Tailwind</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Vite</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Python</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">OpenCV</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Flask</span>
-          </div>
-          <div class="mt-4 flex gap-3 text-sm">
-            <a class="underline" href="https://your-demo-link.example">เดโม</a>
-            <a class="underline" href="https://github.com/your-username/project-one">โค้ด</a>
-            <a class="underline gallery-trigger" href="#" data-start="0">More</a>
+        <!-- Facial Recognition -->
+        <article class="group p-6 rounded-3xl border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:scale-105 transition-all duration-300 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+          <a href="#modal-senior"><img src="./assets/img/projects/senoir/IMG_0028.PNG" alt="ThaiID and Face Recognition-Based Wi-Fi Login System screenshot" class="rounded-2xl w-full h-48 object-contain bg-white group-hover:scale-105 transition-transform duration-300" /></a>
+          <h3 class="mt-5 font-semibold text-lg text-slate-800 dark:text-slate-200">ThaiID and Face Recognition-Based Wi-Fi Login System</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Senior Project - A secure Wi-Fi access system using Thai National ID verification and facial recognition technology for enhanced security.</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 font-medium">Next.js</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 font-medium">React</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 font-medium">Tailwind CSS</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 font-medium">MongoDB</span>
           </div>
         </article>
 
-        <article class="group p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-soft transition">
-          <div class="aspect-video rounded-xl bg-slate-200/60 dark:bg-slate-800/60 grid place-items-center">
-            <span class="text-sm text-slate-500">ภาพหน้าปกโปรเจกต์</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-lg">Project Two</h3>
-          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">แดชบอร์ดวิเคราะห์ข้อมูลจากไฟล์ CSV</p>
-        <!-- Mobile App Library Reservation System -->
-        <article class="group p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-soft transition gallery-card" data-images='["./assets/img/projects/Screenshot%202025-09-15%20203623.png","./assets/img/projects/Screenshot%202025-09-15%20203641.png","./assets/img/projects/Screenshot%202025-09-15%20203651.png","./assets/img/projects/Screenshot%202025-09-15%20203615.png"]'>
-          <a href="#" class="block aspect-video overflow-hidden rounded-xl bg-slate-200/60 dark:bg-slate-800/60 gallery-trigger" data-start="0">
-            <img src="./assets/img/projects/Screenshot%202025-09-15%20203623.png" alt="Mobile App Sneaker Shop screenshot" class="w-full h-full object-cover object-top hover:scale-[1.02] transition-transform" />
-          </a>
-          <h3 class="mt-4 font-semibold text-lg">Mobile App Sneaker Shop</h3>
-          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Mobile e-commerce app UI for sneakers with modern product cards.</p>
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Python</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Pandas</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Plotly</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Flutter</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Firebase</span>
-          </div>
-          <div class="mt-4 flex gap-3 text-sm">
-            <a class="underline" href="https://your-demo-link.example">เดโม</a>
-            <a class="underline" href="https://github.com/your-username/project-two">โค้ด</a>
-            <a class="underline gallery-trigger" href="#" data-start="0">More</a>         
+        <!-- Mobile Sneaker Shop -->
+        <article class="group p-6 rounded-3xl border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:scale-105 transition-all duration-300 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+          <a href="#modal-mobile"><img src="./assets/img/projects/mobile/Screenshot%202025-09-15%20203623.png" alt="Mobile App Sneaker Shop screenshot" class="rounded-2xl w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" /></a>
+          <h3 class="mt-5 font-semibold text-lg text-slate-800 dark:text-slate-200">Mobile App Sneaker Shop</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">E-commerce mobile application for sneakers with comprehensive UI/UX design in Figma and full-stack development using Flutter and Node.js.</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 font-medium">Flutter</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 font-medium">Node.js</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 font-medium">XAMPP</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 font-medium">Figma</span>
           </div>
         </article>
 
-        <article class="group p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-soft transition">
-          <div class="aspect-video rounded-xl bg-slate-200/60 dark:bg-slate-800/60 grid place-items-center">
-            <span class="text-sm text-slate-500">ภาพหน้าปกโปรเจกต์</span>
-          </div>
-          <h3 class="mt-4 font-semibold text-lg">Project Three</h3>
-          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">ระบบจองคิวร้านค้า พร้อมแจ้งเตือนอีเมล</p>
-        <!-- Web App Library Reservation System -->
-        <article class="group p-5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-soft transition gallery-card" data-images='["./assets/img/projects/Screenshot%202025-09-15%20202142.png","./assets/img/projects/Screenshot%202025-09-15%20202210.png","./assets/img/projects/Screenshot%202025-09-15%20202240.png","./assets/img/projects/Screenshot%202025-09-15%20202257.png"]'>
-          <a href="#" class="block aspect-video overflow-hidden rounded-xl bg-slate-200/60 dark:bg-slate-800/60 gallery-trigger" data-start="0">
-            <img src="./assets/img/projects/Screenshot%202025-09-15%20202142.png" alt="Web App reservation screenshot" class="w-full h-full object-cover object-top hover:scale-[1.02] transition-transform" />
-          </a>
-          <h3 class="mt-4 font-semibold text-lg">Web App Library Reservation</h3>
-          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Web application for booking and managing library rooms.</p>
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">React</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Node.js</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">Express</span>
-            <span class="px-2 py-1 rounded-full border border-slate-300 dark:border-slate-600">MongoDB</span>
-          </div>
-          <div class="mt-4 flex gap-3 text-sm">
-            <a class="underline" href="https://your-demo-link.example">เดโม</a>
-            <a class="underline" href="https://github.com/your-username/project-three">โค้ด</a>
-            <a class="underline gallery-trigger" href="#" data-start="0">More</a>
+        <!-- Library Reservation -->
+        <article class="group p-6 rounded-3xl border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:scale-105 transition-all duration-300 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+          <a href="#modal-web"><img src="./assets/img/projects/web/Screenshot%202025-09-15%20202142.png" alt="Web App Library Reservation System screenshot" class="rounded-2xl w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" /></a>
+          <h3 class="mt-5 font-semibold text-lg text-slate-800 dark:text-slate-200">Web App Library Reservation System</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">A comprehensive web application for managing library seat bookings and schedules, featuring wireframes and prototypes designed in Figma.</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 font-medium">HTML/CSS</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 font-medium">Node.js</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 font-medium">XAMPP</span>
+            <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 font-medium">Figma</span>
           </div>
         </article>
       </div>
@@ -235,19 +443,56 @@
   <!-- Skills -->
   <section id="skills" class="py-16 md:py-24">
     <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-2xl md:text-3xl font-extrabold">ทักษะ</h2>
-      <h2 class="text-2xl md:text-3xl font-extrabold">ทักษะเด่น</h2>
-      <div class="mt-6 flex flex-wrap gap-2 text-sm">
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">HTML</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">CSS</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">JavaScript</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">React</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Tailwind</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Git</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Figma</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Frontend Development</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">Backend Development</span>
-        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">UX/UI Design</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Technical Skills</h2>
+      <p class="mt-3 text-slate-600 dark:text-slate-300">Technologies and tools I use to bring ideas to life</p>
+      <div class="mt-8 grid md:grid-cols-3 gap-8">
+        <div class="p-6 rounded-3xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-soft">
+          <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+            Programming Languages
+          </h3>
+          <div class="flex flex-wrap gap-3">
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 dark:from-orange-900 dark:to-orange-800 dark:text-orange-200 font-medium text-sm">HTML</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 dark:from-blue-900 dark:to-blue-800 dark:text-blue-200 font-medium text-sm">CSS</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-800 dark:from-yellow-900 dark:to-yellow-800 dark:text-yellow-200 font-medium text-sm">JavaScript</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-red-100 to-red-200 text-red-800 dark:from-red-900 dark:to-red-800 dark:text-red-200 font-medium text-sm">Java</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 dark:from-indigo-900 dark:to-indigo-800 dark:text-indigo-200 font-medium text-sm">Express.js</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 font-medium text-sm">SQL</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 dark:from-purple-900 dark:to-purple-800 dark:text-purple-200 font-medium text-sm">NoSQL</span>
+          </div>
+        </div>
+        <div class="p-6 rounded-3xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-soft">
+          <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            Frameworks & Libraries
+          </h3>
+          <div class="flex flex-wrap gap-3">
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 font-medium text-sm">Node.js</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 dark:from-gray-900 dark:to-gray-800 dark:text-gray-200 font-medium text-sm">Next.js</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 dark:from-blue-900 dark:to-blue-800 dark:text-blue-200 font-medium text-sm">TypeScript</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-100 to-cyan-200 text-cyan-800 dark:from-cyan-900 dark:to-cyan-800 dark:text-cyan-200 font-medium text-sm">React</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-teal-100 to-teal-200 text-teal-800 dark:from-teal-900 dark:to-teal-800 dark:text-teal-200 font-medium text-sm">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="p-6 rounded-3xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-soft">
+          <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Tools & Platforms
+          </h3>
+          <div class="flex flex-wrap gap-3">
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 dark:from-blue-900 dark:to-blue-800 dark:text-blue-200 font-medium text-sm">Docker</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-green-100 to-green-200 text-green-800 dark:from-green-900 dark:to-green-800 dark:text-green-200 font-medium text-sm">Nginx</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-100 to-pink-200 text-pink-800 dark:from-pink-900 dark:to-pink-800 dark:text-pink-200 font-medium text-sm">Figma</span>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 dark:from-orange-900 dark:to-orange-800 dark:text-orange-200 font-medium text-sm">Git</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -256,141 +501,384 @@
   <section id="contact" class="py-16 md:py-24 bg-slate-50 dark:bg-slate-950/30">
     <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
       <div>
-        <h2 class="text-2xl md:text-3xl font-extrabold">ติดต่อ</h2>
-        <p class="mt-2 text-slate-600 dark:text-slate-300">เปิดรับโอกาสใหม่ ๆ เสมอ มาคุยกันได้เลย</p>
-        <div class="mt-6 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-          <p class="text-sm text-slate-600 dark:text-slate-300">อีเมล</p>
-          <a class="text-lg underline" href="mailto:you@example.com">you@example.com</a>
-          <div class="mt-4 text-sm text-slate-600 dark:text-slate-300">หรือส่งข้อความด่วนผ่านฟอร์มนี้</div>
-          <form class="mt-4 grid gap-3" onsubmit="return sendEmail(event)">
-            <input required class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="ชื่อของคุณ" />
-            <input required type="email" class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="อีเมลของคุณ" />
-            <textarea required rows="4" class="px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" placeholder="ข้อความ"></textarea>
-            <button class="px-5 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900" type="submit">ส่งข้อความ</button>
-          </form>
-        <p class="mt-2 text-slate-600 dark:text-slate-300">ติดต่อทางอีเมลหรือช่องทางด้านล่างนี้</p>
-        <div class="mt-6 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 grid gap-3">
+        <h2 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get In Touch</h2>
+        <p class="mt-3 text-slate-600 dark:text-slate-300 leading-relaxed">I'm always open to new opportunities and exciting projects. Let's connect and create something amazing together!</p>
+        <div class="mt-8 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-soft">
+          <div class="grid gap-6">
+            <div class="flex items-center gap-4">
+              <div class="p-3 rounded-2xl bg-blue-100 dark:bg-blue-900/30">
+                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </div>
           <div>
-            <p class="text-sm text-slate-600 dark:text-slate-300">อีเมล</p>
-            <a class="text-lg underline" href="mailto:visarnvill11@gmail.com">visarnvill11@gmail.com</a>
+                <p class="text-sm text-slate-600 dark:text-slate-300">Email</p>
+                <a class="text-lg font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200" href="mailto:visarnvill11@gmail.com">visarnvill11@gmail.com</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="p-3 rounded-2xl bg-green-100 dark:bg-green-900/30">
+                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
           </div>
           <div>
-            <p class="text-sm text-slate-600 dark:text-slate-300">โทร</p>
-            <a class="text-lg underline" href="tel:0945276645">094 527 6645</a>
+                <p class="text-sm text-slate-600 dark:text-slate-300">Phone</p>
+                <a class="text-lg font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors duration-200" href="tel:0945276645">+66 94 527 6645</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 pt-2">
+              <div class="flex gap-4">
+                <a class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors duration-200" href="https://github.com/visarnvill1114">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  <span class="text-sm font-medium">GitHub</span>
+                </a>
+                <a class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors duration-200" href="https://visarnvill1114.github.io/">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                  </svg>
+                  <span class="text-sm font-medium">Portfolio</span>
+                </a>
+              </div>
           </div>
-          <div class="flex gap-4 pt-2 text-slate-600 dark:text-slate-300">
-            <a class="underline" href="https://github.com/visarnvill1114">GitHub</a>
-            
-            <a class="underline" href="#home">กลับขึ้นด้านบน</a>
           </div>
         </div>
       </div>
-      <div class="p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-        <h3 class="font-semibold">ดาวน์โหลดเรซูเม่</h3>
-        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">อัปโหลดไฟล์ PDF ของคุณไว้ใน repo และลิงก์ไว้ที่นี่</p>
-        <a href="./resume.pdf" class="mt-3 inline-block underline">เปิดไฟล์ resume.pdf</a>
-        <a href="./assets/docs/resume.pdf" download class="mt-3 inline-block underline">เปิดไฟล์ Resume.pdf</a>
+      <div class="p-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-soft">
+        <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 mb-4">Download Resume</h3>
+        <p class="text-slate-600 dark:text-slate-300 mb-6">Get a copy of my resume to learn more about my experience and qualifications.</p>
+        <a href="./assets/docs/resume.pdf" download class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 font-medium">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Download Resume
+        </a>
       </div>
     </div>
   </section>
 
-  <footer class="py-10">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-sm text-slate-500">© <span id="year"></span> ชื่อของคุณ — All rights reserved.</p>
-      <div class="flex gap-4 text-slate-500">
-        <a href="#home" class="underline">กลับขึ้นด้านบน</a>
+  <!-- Footer -->
+  <footer class="py-12 bg-slate-900 dark:bg-slate-950">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+          <h3 class="text-xl font-bold text-white mb-2">Visarn Srisanguanvilas</h3>
+          <p class="text-slate-400">Computer Engineering Student & Developer</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#home" class="text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+            Back to Top
+          </a>
+          <div class="h-6 w-px bg-slate-600"></div>
+          <p class="text-sm text-slate-500">© <span id="year"></span> All rights reserved.</p>
+        </div>
       </div>
     </div>
   </footer>
 
+  <!-- Modals for project galleries -->
+  <div id="modal-senior" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">ThaiID and Face Recognition-Based Wi-Fi Login System</h2>
+        <button class="modal-close" onclick="closeModal('modal-senior')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Senior Project</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">
+            A secure Wi-Fi access system using Thai National ID verification and facial recognition technology. 
+            Built with Next.js, React, Tailwind CSS, and MongoDB for enhanced security and user experience.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Next.js</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">React</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Tailwind CSS</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">MongoDB</span>
+          </div>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0028.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0028.PNG" alt="ThaiID and Face Recognition System - Screenshot 1">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">System Overview</h4>
+              <p class="gallery-description">Main system interface and navigation</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0029.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0029.PNG" alt="ThaiID and Face Recognition System - Screenshot 2">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">User Registration</h4>
+              <p class="gallery-description">User registration and profile management</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0030.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0030.PNG" alt="ThaiID and Face Recognition System - Screenshot 3">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Face Recognition Setup</h4>
+              <p class="gallery-description">Facial recognition configuration and training</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0031.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0031.PNG" alt="ThaiID and Face Recognition System - Screenshot 4">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">WiFi Access Control</h4>
+              <p class="gallery-description">WiFi access management and monitoring</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0032.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0032.PNG" alt="ThaiID and Face Recognition System - Screenshot 5">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Security Dashboard</h4>
+              <p class="gallery-description">Security monitoring and access logs</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0033.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0033.PNG" alt="ThaiID and Face Recognition System - Screenshot 6">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Admin Panel</h4>
+              <p class="gallery-description">Administrative interface for system management</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/senoir/IMG_0034.PNG')">
+            <img src="./assets/img/projects/senoir/IMG_0034.PNG" alt="ThaiID and Face Recognition System - Screenshot 7">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">System Reports</h4>
+              <p class="gallery-description">Comprehensive system reports and analytics</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-mobile" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Mobile App Sneaker Shop</h2>
+        <button class="modal-close" onclick="closeModal('modal-mobile')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Mobile Application Project</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">
+            E-commerce mobile application for sneakers featuring comprehensive UI/UX design in Figma 
+            and full-stack development using Flutter, Node.js backend, and XAMPP database management.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Flutter</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Node.js</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">XAMPP</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Figma</span>
+          </div>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/mobile/Screenshot%202025-09-15%20203615.png')">
+            <img src="./assets/img/projects/mobile/Screenshot%202025-09-15%20203615.png" alt="Mobile Sneaker Shop - Screenshot 1">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Home Screen</h4>
+              <p class="gallery-description">Main application interface</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/mobile/Screenshot%202025-09-15%20203623.png')">
+            <img src="./assets/img/projects/mobile/Screenshot%202025-09-15%20203623.png" alt="Mobile Sneaker Shop - Screenshot 2">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Product Catalog</h4>
+              <p class="gallery-description">Comprehensive sneaker collection display</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/mobile/Screenshot%202025-09-15%20203641.png')">
+            <img src="./assets/img/projects/mobile/Screenshot%202025-09-15%20203641.png" alt="Mobile Sneaker Shop - Screenshot 3">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Shopping Cart</h4>
+              <p class="gallery-description">Secure cart and payment system</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/mobile/Screenshot%202025-09-15%20203651.png')">
+            <img src="./assets/img/projects/mobile/Screenshot%202025-09-15%20203651.png" alt="Mobile Sneaker Shop - Screenshot 4">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Order Management</h4>
+              <p class="gallery-description">Complete order tracking and history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-web" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Web App Library Reservation System</h2>
+        <button class="modal-close" onclick="closeModal('modal-web')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-2">Web Application Project</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-4">
+            A comprehensive web application for managing library seat bookings and schedules. 
+            Features wireframes and prototypes designed in Figma with HTML/CSS frontend and Node.js backend development.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">HTML/CSS</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Node.js</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">XAMPP</span>
+            <span class="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Figma</span>
+          </div>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/web/Screenshot%202025-09-15%20202142.png')">
+            <img src="./assets/img/projects/web/Screenshot%202025-09-15%20202142.png" alt="Library Reservation System - Screenshot 1">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Homepage</h4>
+              <p class="gallery-description">Main library reservation system interface</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/web/Screenshot%202025-09-15%20202210.png')">
+            <img src="./assets/img/projects/web/Screenshot%202025-09-15%20202210.png" alt="Library Reservation System - Screenshot 2">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Seat Booking</h4>
+              <p class="gallery-description">Interactive seat selection and scheduling system</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/web/Screenshot%202025-09-15%20202240.png')">
+            <img src="./assets/img/projects/web/Screenshot%202025-09-15%20202240.png" alt="Library Reservation System - Screenshot 3">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Booking Management</h4>
+              <p class="gallery-description">Reservation management and schedule overview</p>
+            </div>
+          </div>
+          <div class="gallery-item" onclick="openImageModal('./assets/img/projects/web/Screenshot%202025-09-15%20202257.png')">
+            <img src="./assets/img/projects/web/Screenshot%202025-09-15%20202257.png" alt="Library Reservation System - Screenshot 4">
+            <div class="gallery-overlay">
+              <h4 class="gallery-title">Admin Panel</h4>
+              <p class="gallery-description">Administrative dashboard for system oversight</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal for full-size viewing -->
+  <div id="imageModal" class="modal">
+    <div class="modal-content" style="max-width: 95%; max-height: 95%; background: transparent; box-shadow: none;">
+      <button class="modal-close" onclick="closeModal('imageModal')" style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 1001;">&times;</button>
+      <img id="modalImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 15px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); background: white; padding: 20px;">
+    </div>
+  </div>
+
   <script>
-    // Theme toggle with localStorage
-    const themeToggle = document.getElementById('themeToggle');
-    const root = document.documentElement;
-    const stored = localStorage.getItem('theme');
-    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      root.classList.add('dark');
-      themeToggle.textContent = 'โหมดสว่าง';
-    }
-    themeToggle.addEventListener('click', () => {
-      root.classList.toggle('dark');
-      const isDark = root.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      themeToggle.textContent = isDark ? 'โหมดสว่าง' : 'โหมดมืด';
-    });
-
-    // Mobile menu
-    document.getElementById('menuBtn').addEventListener('click', () => {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
-    });
-
-    // Contact form via mailto
-    function sendEmail(e){
-      e.preventDefault();
-      const [nameInput, emailInput, messageInput] = e.target.elements;
-      const subject = encodeURIComponent('Portfolio Contact: ' + nameInput.value);
-      const body = encodeURIComponent(`จาก: ${nameInput.value} <${emailInput.value}>
-\nข้อความ:\n${messageInput.value}`);
-      window.location.href = `mailto:you@example.com?subject=${subject}&body=${body}`;
-      e.target.reset();
-      alert('กำลังเปิดอีเมลไคลเอนต์ของคุณเพื่อส่งข้อความ');
-      return false;
-    // No contact form needed; keep a helper for copying email
-    function copyEmail(){
-      const email = 'visarnvill11@gmail.com';
-      navigator.clipboard?.writeText(email);
-      alert('คัดลอกอีเมลแล้ว: ' + email);
+    // Modal functionality
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
     }
 
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    function openImageModal(imageSrc) {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageSrc;
+      modal.style.display = 'flex';
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
+    }
 
-    // Simple lightbox gallery for project screenshots
-    const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 hidden z-[100] bg-black/80';
-    overlay.innerHTML = `
-      <div class="w-full h-full flex items-center justify-center p-4">
-        <button id="lbPrev" class="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white">◀</button>
-        <img id="lbImg" src="" alt="gallery" class="max-h-[90vh] max-w-[90vw] rounded-xl shadow-2xl"/>
-        <button id="lbNext" class="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white">▶</button>
-        <button id="lbClose" class="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white">✕</button>
-      </div>`;
-    document.body.appendChild(overlay);
-
-    let currentGallery = [];
-    let currentIndex = 0;
-    const lbImg = overlay.querySelector('#lbImg');
-    const showOverlay = (images, index) => {
-      currentGallery = images;
-      currentIndex = index;
-      lbImg.src = images[currentIndex];
-      overlay.classList.remove('hidden');
-    };
-    const hideOverlay = () => overlay.classList.add('hidden');
-    overlay.querySelector('#lbClose').addEventListener('click', hideOverlay);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) hideOverlay(); });
-    overlay.querySelector('#lbPrev').addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-      lbImg.src = currentGallery[currentIndex];
-    });
-    overlay.querySelector('#lbNext').addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % currentGallery.length;
-      lbImg.src = currentGallery[currentIndex];
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('modal')) {
+        const modalId = event.target.id;
+        closeModal(modalId);
+      }
     });
 
-    // Wire up any .gallery-card and its .gallery-trigger
-    document.querySelectorAll('.gallery-card').forEach(card => {
-      const images = JSON.parse(card.getAttribute('data-images'));
-      card.querySelectorAll('.gallery-trigger').forEach(el => {
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          const start = Number(el.getAttribute('data-start') || 0);
-          showOverlay(images, start);
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        const openModals = document.querySelectorAll('.modal.show');
+        openModals.forEach(modal => {
+          closeModal(modal.id);
         });
+      }
+    });
+
+    // Enhanced modal opening with animation
+    document.addEventListener('click', function(event) {
+      if (event.target.closest('a[href^="#modal-"]')) {
+        event.preventDefault();
+        const modalId = event.target.closest('a[href^="#modal-"]').getAttribute('href').substring(1);
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          modal.classList.add('show');
+        }, 10);
+      }
+    });
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    // Check for saved theme preference or default to light mode
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    html.classList.toggle('dark', currentTheme === 'dark');
+    updateThemeButton();
+    
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+      updateThemeButton();
+    });
+    
+    function updateThemeButton() {
+      const isDark = html.classList.contains('dark');
+      themeToggle.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    }
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking on a link
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
       });
     });
-  }
+
+    // Update year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        if (this.getAttribute('href').startsWith('#modal-')) return;
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
   </script>
 </body>
 </html>
-    
+  
